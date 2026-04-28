@@ -12,6 +12,8 @@ pipeline.start(config)
 
 align=rs.align(rs.stream.color)
 
+dist=1
+
 print("starting")
 
 try:
@@ -26,7 +28,7 @@ try:
 		depth=np.asanyarray(depth_frame.get_data())
 
 		depth_m=depth*depth_frame.get_units()
-		mask=(depth_m>0)&(depth_m<1.0)
+		mask=(depth_m>0)&(depth_m<dist)
 		mask=(mask*255).astype(np.uint8)
 
 		kernel=np.ones((5,5),np.uint8)
