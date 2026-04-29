@@ -12,7 +12,7 @@ pipeline.start(config)
 
 align=rs.align(rs.stream.color)
 print("starting")
-
+maskdist=1.0
 try:
 	while True:
 		frames=pipeline.wait_for_frames()
@@ -25,7 +25,7 @@ try:
 		depth=np.asanyarray(depth_frame.get_data())
 
 		depth_m=depth*depth_frame.get_units()
-		mask=(depth_m>0)&(depth_m<1.0)
+		mask=(depth_m>0)&(depth_m<maskdist)
 		mask=(mask*255).astype(np.uint8)
 
 		kernel=np.ones((5,5),np.uint8)
@@ -44,9 +44,9 @@ try:
 			cx=x+w//2
 			cy=y+h//2
 			dist=depth_frame.get_distance(cx,cy)
-
-			cv2.putText(color,f"{dist:.2f}m", (x,y-10), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,255,0),2)
-
+			label=f"({cx},{cy}.) {dist:.2f}m"
+			cv2.putText(color,label,(x,y-10), cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,255,0),2)
+			cv2
 		cv2.imshow("mask",mask)
 		cv2.imshow("result",color)
 
